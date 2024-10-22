@@ -135,8 +135,8 @@ ALTER SEQUENCE public.num_of_release_id_seq OWNED BY public.num_of_release.id;
 CREATE TABLE public.publication (
     id integer NOT NULL,
     name text,
-    publishinghouse_id integer,
-    numberofreleases integer
+    publishing_house_id integer,
+    number_of_releases integer
 );
 
 
@@ -177,22 +177,22 @@ CREATE TABLE public.publication_of_article (
 ALTER TABLE public.publication_of_article OWNER TO science_periodic_user;
 
 --
--- Name: publishinghouse; Type: TABLE; Schema: public; Owner: science_periodic_user
+-- Name: publishing_house; Type: TABLE; Schema: public; Owner: science_periodic_user
 --
 
-CREATE TABLE public.publishinghouse (
+CREATE TABLE public.publishing_house (
     id integer NOT NULL,
     name text
 );
 
 
-ALTER TABLE public.publishinghouse OWNER TO science_periodic_user;
+ALTER TABLE public.publishing_house OWNER TO science_periodic_user;
 
 --
--- Name: publishinghouse_id_seq; Type: SEQUENCE; Schema: public; Owner: science_periodic_user
+-- Name: publishing_house_id_seq; Type: SEQUENCE; Schema: public; Owner: science_periodic_user
 --
 
-CREATE SEQUENCE public.publishinghouse_id_seq
+CREATE SEQUENCE public.publishing_house_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -201,13 +201,13 @@ CREATE SEQUENCE public.publishinghouse_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.publishinghouse_id_seq OWNER TO science_periodic_user;
+ALTER SEQUENCE public.publishing_house_id_seq OWNER TO science_periodic_user;
 
 --
--- Name: publishinghouse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: science_periodic_user
+-- Name: publishing_house_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: science_periodic_user
 --
 
-ALTER SEQUENCE public.publishinghouse_id_seq OWNED BY public.publishinghouse.id;
+ALTER SEQUENCE public.publishing_house_id_seq OWNED BY public.publishing_house.id;
 
 
 --
@@ -239,10 +239,10 @@ ALTER TABLE ONLY public.publication ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: publishinghouse id; Type: DEFAULT; Schema: public; Owner: science_periodic_user
+-- Name: publishing_house id; Type: DEFAULT; Schema: public; Owner: science_periodic_user
 --
 
-ALTER TABLE ONLY public.publishinghouse ALTER COLUMN id SET DEFAULT nextval('public.publishinghouse_id_seq'::regclass);
+ALTER TABLE ONLY public.publishing_house ALTER COLUMN id SET DEFAULT nextval('public.publishing_house_id_seq'::regclass);
 
 
 --
@@ -273,7 +273,7 @@ COPY public.num_of_release (id, publication_id, num_of_publication, date) FROM s
 -- Data for Name: publication; Type: TABLE DATA; Schema: public; Owner: science_periodic_user
 --
 
-COPY public.publication (id, name, publishinghouse_id, numberofreleases) FROM stdin;
+COPY public.publication (id, name, publishing_house_id, number_of_releases) FROM stdin;
 \.
 
 
@@ -286,10 +286,10 @@ COPY public.publication_of_article (article_id, num_of_release_id) FROM stdin;
 
 
 --
--- Data for Name: publishinghouse; Type: TABLE DATA; Schema: public; Owner: science_periodic_user
+-- Data for Name: publishing_house; Type: TABLE DATA; Schema: public; Owner: science_periodic_user
 --
 
-COPY public.publishinghouse (id, name) FROM stdin;
+COPY public.publishing_house (id, name) FROM stdin;
 \.
 
 
@@ -322,10 +322,10 @@ SELECT pg_catalog.setval('public.publication_id_seq', 1, false);
 
 
 --
--- Name: publishinghouse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: science_periodic_user
+-- Name: publishing_house_id_seq; Type: SEQUENCE SET; Schema: public; Owner: science_periodic_user
 --
 
-SELECT pg_catalog.setval('public.publishinghouse_id_seq', 1, false);
+SELECT pg_catalog.setval('public.publishing_house_id_seq', 1, false);
 
 
 --
@@ -369,10 +369,10 @@ ALTER TABLE ONLY public.publication
 
 
 --
--- Name: publishinghouse publishinghouse_pkey; Type: CONSTRAINT; Schema: public; Owner: science_periodic_user
+-- Name: publishing_house publishinghouse_pkey; Type: CONSTRAINT; Schema: public; Owner: science_periodic_user
 --
 
-ALTER TABLE ONLY public.publishinghouse
+ALTER TABLE ONLY public.publishing_house
     ADD CONSTRAINT publishinghouse_pkey PRIMARY KEY (id);
 
 
@@ -413,7 +413,7 @@ ALTER TABLE ONLY public.num_of_release
 --
 
 ALTER TABLE ONLY public.publication
-    ADD CONSTRAINT publishinghouse_idfk FOREIGN KEY (publishinghouse_id) REFERENCES public.publishinghouse(id);
+    ADD CONSTRAINT publishinghouse_idfk FOREIGN KEY (publishing_house_id) REFERENCES public.publishing_house(id);
 
 
 --
