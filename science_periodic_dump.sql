@@ -27,8 +27,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.article (
     id integer NOT NULL,
-    author_id integer,
-    name text
+    author_id integer NOT NULL,
+    name text NOT NULL
 );
 
 
@@ -62,8 +62,8 @@ ALTER SEQUENCE public.article_id_seq OWNED BY public.article.id;
 
 CREATE TABLE public.author (
     id integer NOT NULL,
-    surname text,
-    name text,
+    surname text NOT NULL,
+    name text NOT NULL,
     fathername text
 );
 
@@ -98,9 +98,9 @@ ALTER SEQUENCE public.author_id_seq OWNED BY public.author.id;
 
 CREATE TABLE public.num_of_release (
     id integer NOT NULL,
-    publication_id integer,
-    num_of_publication integer,
-    date timestamp without time zone
+    publication_id integer NOT NULL,
+    num_of_publication integer NOT NULL,
+    date timestamp without time zone NOT NULL
 );
 
 
@@ -134,9 +134,11 @@ ALTER SEQUENCE public.num_of_release_id_seq OWNED BY public.num_of_release.id;
 
 CREATE TABLE public.publication (
     id integer NOT NULL,
-    name text,
-    publishing_house_id integer,
-    number_of_releases integer
+    name text NOT NULL,
+    publishing_house_id integer NOT NULL,
+    number_of_releases integer NOT NULL,
+    CONSTRAINT num_of_publication CHECK ((number_of_releases > 0)),
+    CONSTRAINT number_of_releases CHECK ((number_of_releases >= 0))
 );
 
 
@@ -182,7 +184,7 @@ ALTER TABLE public.publication_of_article OWNER TO science_periodic_user;
 
 CREATE TABLE public.publishing_house (
     id integer NOT NULL,
-    name text
+    name text NOT NULL
 );
 
 
