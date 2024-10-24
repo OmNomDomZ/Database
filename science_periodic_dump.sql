@@ -250,6 +250,11 @@ ALTER TABLE ONLY public.publishing_house ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 COPY public.article (id, author_id, name) FROM stdin;
+0	0	Поведение свободноживущих шимпанзе в резервации Гомбе
+1	3	О новом радиоактивном веществе, содержащемся в урановой руде
+2	1	Молекулярная конфигурация в натриевом тимонуклеате
+3	2	К электродинамике движущихся тел
+4	4	Принцип наименьшего действия в квантовой механике
 \.
 
 
@@ -258,6 +263,11 @@ COPY public.article (id, author_id, name) FROM stdin;
 --
 
 COPY public.author (id, surname, name, fathername) FROM stdin;
+0	Гудолл	Джейн	\N
+1	Франклин	Розалинд	\N
+2	Эйнштейн	Альберт	\N
+3	Кюри	Мари	\N
+4	Фейнман	Ричард	\N
 \.
 
 
@@ -266,6 +276,16 @@ COPY public.author (id, surname, name, fathername) FROM stdin;
 --
 
 COPY public.num_of_release (id, publication_id, num_of_publication, date) FROM stdin;
+0	0	1	2001-01-01 00:00:00
+1	0	2	2001-02-01 00:00:00
+2	1	1	2001-01-15 00:00:00
+3	2	1	2001-01-10 00:00:00
+4	2	2	2001-03-10 00:00:00
+5	3	1	2002-01-20 00:00:00
+6	4	1	2010-01-10 00:00:00
+7	4	2	2010-01-20 00:00:00
+8	4	3	2010-01-30 00:00:00
+9	5	1	2022-01-18 00:00:00
 \.
 
 
@@ -274,6 +294,12 @@ COPY public.num_of_release (id, publication_id, num_of_publication, date) FROM s
 --
 
 COPY public.publication (id, name, publishing_house_id, number_of_releases) FROM stdin;
+0	Nature	0	12
+1	The Lancet	1	12
+2	Advanced Materials	2	6
+3	Journal of Applied Psychology	19	6
+4	American Journal of Sociology	20	36
+5	IEEE Transactions on Neural Networks and Learning Systems	21	24
 \.
 
 
@@ -282,6 +308,14 @@ COPY public.publication (id, name, publishing_house_id, number_of_releases) FROM
 --
 
 COPY public.publication_of_article (article_id, num_of_release_id) FROM stdin;
+0	0
+0	7
+1	1
+1	3
+2	4
+3	0
+3	4
+4	9
 \.
 
 
@@ -290,6 +324,12 @@ COPY public.publication_of_article (article_id, num_of_release_id) FROM stdin;
 --
 
 COPY public.publishing_house (id, name) FROM stdin;
+0	Springer Nature
+1	Elsevier
+2	Wiley
+19	Taylor & Francis
+20	SAGE Publications
+21	IEEE (Institute of Electrical)
 \.
 
 
@@ -304,7 +344,7 @@ SELECT pg_catalog.setval('public.article_id_seq', 1, false);
 -- Name: author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: science_periodic_user
 --
 
-SELECT pg_catalog.setval('public.author_id_seq', 1, false);
+SELECT pg_catalog.setval('public.author_id_seq', 5, true);
 
 
 --
