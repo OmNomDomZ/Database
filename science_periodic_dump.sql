@@ -100,7 +100,8 @@ CREATE TABLE public.num_of_release (
     id integer NOT NULL,
     publication_id integer NOT NULL,
     num_of_publication integer NOT NULL,
-    date timestamp without time zone NOT NULL
+    date timestamp without time zone NOT NULL,
+    CONSTRAINT num_of_publication CHECK ((num_of_publication > 0))
 );
 
 
@@ -137,7 +138,6 @@ CREATE TABLE public.publication (
     name text NOT NULL,
     publishing_house_id integer NOT NULL,
     number_of_releases integer NOT NULL,
-    CONSTRAINT num_of_publication CHECK ((number_of_releases > 0)),
     CONSTRAINT number_of_releases CHECK ((number_of_releases >= 0))
 );
 
