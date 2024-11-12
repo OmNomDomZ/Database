@@ -1,14 +1,29 @@
--- COUNTRIES
-ALTER TABLE public."COUNTRIES" ADD CONSTRAINT "COUNTR_REG_FK" FOREIGN KEY ("REGION_ID") REFERENCES public."REGIONS"("REGION_ID");
+-- Таблица countries
+ALTER TABLE public.countries 
+ADD CONSTRAINT countr_reg_fk FOREIGN KEY (region_id) REFERENCES public.regions(region_id);
 
--- LOCATIONS
-ALTER TABLE public."LOCATIONS" ADD CONSTRAINT "LOC_C_ID_FK" FOREIGN KEY ("COUNTRY_ID") REFERENCES public."COUNTRIES"("COUNTRY_ID");
+-- Таблица locations
+ALTER TABLE public.locations 
+ADD CONSTRAINT loc_c_id_fk FOREIGN KEY (country_id) REFERENCES public.countries(country_id);
 
--- DEPARTMENTS
-ALTER TABLE public."DEPARTMENTS" ADD CONSTRAINT "DEPT_LOC_FK" FOREIGN KEY ("LOCATION_ID") REFERENCES public."LOCATIONS"("LOCATION_ID");
-ALTER TABLE public."DEPARTMENTS" ADD CONSTRAINT "DEPT_MGR_FK" FOREIGN KEY ("MANAGER_ID") REFERENCES public."EMPLOYEES"("EMPLOYEE_ID");
+-- Таблица departments
+ALTER TABLE public.departments 
+ADD CONSTRAINT dept_loc_fk FOREIGN KEY (location_id) REFERENCES public.locations(location_id);
+ALTER TABLE public.departments 
+ADD CONSTRAINT dept_mgr_fk FOREIGN KEY (manager_id) REFERENCES public.employees(employee_id);
 
--- EMPLOYEES
-ALTER TABLE public."EMPLOYEES" ADD CONSTRAINT "EMP_DEPT_FK" FOREIGN KEY ("DEPARTMENT_ID") REFERENCES public."DEPARTMENTS"("DEPARTMENT_ID");
-ALTER TABLE public."EMPLOYEES" ADD CONSTRAINT "EMP_JOB_FK" FOREIGN KEY ("JOB_ID") REFERENCES public."JOBS"("JOB_ID");
-ALTER TABLE public."EMPLOYEES" ADD CONSTRAINT "EMP_MANAGER_FK" FOREIGN KEY ("MANAGER_ID") REFERENCES public."EMPLOYEES"("EMPLOYEE_ID");
+-- Таблица employees
+ALTER TABLE public.employees 
+ADD CONSTRAINT emp_dept_fk FOREIGN KEY (department_id) REFERENCES public.departments(department_id);
+ALTER TABLE public.employees 
+ADD CONSTRAINT emp_job_fk FOREIGN KEY (job_id) REFERENCES public.jobs(job_id);
+ALTER TABLE public.employees 
+ADD CONSTRAINT emp_manager_fk FOREIGN KEY (manager_id) REFERENCES public.employees(employee_id);
+
+-- Таблица job_history
+ALTER TABLE public.job_history 
+ADD CONSTRAINT jhist_emp_fk FOREIGN KEY (employee_id) REFERENCES public.employees(employee_id);
+ALTER TABLE public.job_history 
+ADD CONSTRAINT jhist_job_fk FOREIGN KEY (job_id) REFERENCES public.jobs(job_id);
+ALTER TABLE public.job_history 
+ADD CONSTRAINT jhist_dept_fk FOREIGN KEY (department_id) REFERENCES public.departments(department_id);

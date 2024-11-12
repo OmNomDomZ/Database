@@ -1,73 +1,73 @@
--- Таблица JOBSТаблица JOBS
-CREATE TABLE public."JOBS" (
-	"JOB_ID" varchar(10) NOT NULL,
-	"JOB_TITLE" varchar(35) NOT NULL,
-	"MIN_SALARY" numeric(6) NULL,
-	"MAX_SALARY" numeric(6) NULL,
-	CONSTRAINT "JOB_ID_PK" PRIMARY KEY ("JOB_ID"),
-	CONSTRAINT "JOB_TITLE_NN" CHECK (("JOB_TITLE" IS NOT NULL))
+-- Таблица jobs
+CREATE TABLE public.jobs (
+    job_id varchar(10) NOT NULL,
+    job_title varchar(35) NOT NULL,
+    min_salary numeric(6) NULL,
+    max_salary numeric(6) NULL,
+    CONSTRAINT job_id_pk PRIMARY KEY (job_id),
+    CONSTRAINT job_title_nn CHECK (job_title IS NOT NULL)
 );
 
--- Таблица REGIONS
-CREATE TABLE public."REGIONS" (
-	"REGION_ID" numeric NOT NULL,
-	"REGION_NAME" varchar(25) NULL,
-	CONSTRAINT "REG_ID_PK" PRIMARY KEY ("REGION_ID")
+-- Таблица regions
+CREATE TABLE public.regions (
+    region_id numeric NOT NULL,
+    region_name varchar(25) NULL,
+    CONSTRAINT reg_id_pk PRIMARY KEY (region_id)
 );
 
--- Таблица COUNTRIES
-CREATE TABLE public."COUNTRIES" (
-	"COUNTRY_ID" bpchar(2) NOT NULL,
-	"COUNTRY_NAME" varchar(40) NULL,
-	"REGION_ID" numeric NULL,
-	CONSTRAINT "COUNTRY_C_ID_PK" PRIMARY KEY ("COUNTRY_ID")
+-- Таблица countries
+CREATE TABLE public.countries (
+    country_id char(2) NOT NULL,
+    country_name varchar(40) NULL,
+    region_id numeric NULL,
+    CONSTRAINT country_c_id_pk PRIMARY KEY (country_id)
 );
 
--- Таблица LOCATIONS
-CREATE TABLE public."LOCATIONS" (
-	"LOCATION_ID" numeric(4) NOT NULL,
-	"STREET_ADDRESS" varchar(40) NULL,
-	"POSTAL_CODE" varchar(12) NULL,
-	"CITY" varchar(30) NOT NULL,
-	"STATE_PROVINCE" varchar(25) NULL,
-	"COUNTRY_ID" bpchar(2) NULL,
-	CONSTRAINT "LOC_ID_PK" PRIMARY KEY ("LOCATION_ID")
+-- Таблица locations
+CREATE TABLE public.locations (
+    location_id numeric(4) NOT NULL,
+    street_address varchar(40) NULL,
+    postal_code varchar(12) NULL,
+    city varchar(30) NOT NULL,
+    state_province varchar(25) NULL,
+    country_id char(2) NULL,
+    CONSTRAINT loc_id_pk PRIMARY KEY (location_id)
 );
 
--- Таблица DEPARTMENTS
-CREATE TABLE public."DEPARTMENTS" (
-	"DEPARTMENT_ID" numeric(4) NOT NULL,
-	"DEPARTMENT_NAME" varchar(30) NOT NULL,
-	"MANAGER_ID" numeric(6) NULL,
-	"LOCATION_ID" numeric(4) NULL,
-	CONSTRAINT "DEPT_ID_PK" PRIMARY KEY ("DEPARTMENT_ID")
+-- Таблица departments
+CREATE TABLE public.departments (
+    department_id numeric(4) NOT NULL,
+    department_name varchar(30) NOT NULL,
+    manager_id numeric(6) NULL,
+    location_id numeric(4) NULL,
+    CONSTRAINT dept_id_pk PRIMARY KEY (department_id)
 );
 
--- Таблица EMPLOYEES
-CREATE TABLE public."EMPLOYEES" (
-	"EMPLOYEE_ID" numeric(6) NOT NULL,
-	"FIRST_NAME" varchar(20) NULL,
-	"LAST_NAME" varchar(25) NOT NULL,
-	"EMAIL" varchar(25) NOT NULL,
-	"PHONE_NUMBER" varchar(20) NULL,
-	"HIRE_DATE" date NOT NULL,
-	"JOB_ID" varchar(10) NOT NULL,
-	"SALARY" numeric(8, 2) NULL,
-	"COMMISSION_PCT" numeric(2, 2) NULL,
-	"MANAGER_ID" numeric(6) NULL,
-	"DEPARTMENT_ID" numeric(4) NULL,
-	CONSTRAINT "EMP_EMAIL_UK" UNIQUE ("EMAIL"),
-	CONSTRAINT "EMP_EMP_ID_PK" PRIMARY KEY ("EMPLOYEE_ID"),
-	CONSTRAINT "EMP_SALARY_MIN" CHECK (("SALARY" > (0)::numeric))
+-- Таблица employees
+CREATE TABLE public.employees (
+    employee_id numeric(6) NOT NULL,
+    first_name varchar(20) NULL,
+    last_name varchar(25) NOT NULL,
+    email varchar(25) NOT NULL,
+    phone_number varchar(20) NULL,
+    hire_date date NOT NULL,
+    job_id varchar(10) NOT NULL,
+    salary numeric(8, 2) NULL,
+    commission_pct numeric(2, 2) NULL,
+    manager_id numeric(6) NULL,
+    department_id numeric(4) NULL,
+    CONSTRAINT emp_email_uk UNIQUE (email),
+    CONSTRAINT emp_emp_id_pk PRIMARY KEY (employee_id),
+    CONSTRAINT emp_salary_min CHECK (salary > 0)
 );
 
--- Таблица JOB_HISTORY
-CREATE TABLE public."JOB_HISTORY" (
-	"EMPLOYEE_ID" numeric(6) NOT NULL,
-	"START_DATE" date NOT NULL,
-	"END_DATE" date NOT NULL,
-	"JOB_ID" varchar(10) NOT NULL,
-	"DEPARTMENT_ID" numeric(4) NULL,
-	CONSTRAINT "JHIST_DATE_INTERVAL" CHECK (("END_DATE" > "START_DATE")),
-	CONSTRAINT "JHIST_EMP_ID_ST_DATE_PK" PRIMARY KEY ("EMPLOYEE_ID", "START_DATE")
+-- Таблица job_history
+CREATE TABLE public.job_history (
+    employee_id numeric(6) NOT NULL,
+    start_date date NOT NULL,
+    end_date date NOT NULL,
+    job_id varchar(10) NOT NULL,
+    department_id numeric(4) NULL,
+    CONSTRAINT jhist_date_interval CHECK (end_date > start_date),
+    CONSTRAINT jhist_emp_id_st_date_pk PRIMARY KEY (employee_id, start_date)
 );
