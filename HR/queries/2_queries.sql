@@ -333,3 +333,141 @@ join departments d on e.department_id = d.department_id
 join locations l on d.location_id = l.location_id
 join MaxSalariesPerCountry mspc on l.country_id = mspc.country_id and e.salary = mspc.max_salary
 order by l.country_id, e.employee_id;
+
+-- 13
+with CountCountryDepartments as (
+    select
+        c.country_id, 
+        count(d.department_id) as count_departments
+    from countries c 
+    join locations l on c.country_id = l.country_id
+    join departments d on l.location_id = d.location_id
+    group by c.country_id 
+), 
+MaxDepartmentsInCountry as (
+    select 
+        MAX(ccd.count_departments) as max_count_departments
+    from CountCountryDepartments ccd
+), 
+CountriesWithMaxDepartments as (
+    select 
+        ccd.country_id
+    from CountCountryDepartments ccd
+    join MaxDepartmentsInCountry mxic on ccd.count_departments = mxic.max_count_departments
+),
+Managers as (
+    select 
+        e.employee_id, 
+        count(sub.manager_id) as subordinate_count
+    from employees e 
+    join employees sub on e.employee_id = sub.manager_id
+    group by e.employee_id
+), 
+MaxSubordinateCount as (
+    select 
+        MAX(m.subordinate_count) as max_subordinate_count
+    from Managers m
+)
+select 
+    e.employee_id as "ID работника",
+    m.subordinate_count as "количество подчиненных"
+from employees e 
+join Managers m on e.employee_id = m.employee_id
+join MaxSubordinateCount msc on m.subordinate_count = msc.max_subordinate_count
+join departments d on e.department_id = d.department_id
+join locations l on d.location_id = l.location_id
+join CountriesWithMaxDepartments cwmd on l.country_id = cwmd.country_id
+order by e.employee_id;
+
+-- 14
+with LeastExperience as (
+    select 
+        e.employee_id, 
+        e.hire_date,
+        l.country_id
+    from employees e
+    join departments d on e.department_id = d.department_id
+    join locations l on d.location_id = l.location_id
+    where e.hire_date = (
+        select
+            MAX(e.hire_date)
+        from employees e
+    )
+), 
+ManagersFromCountry as (
+    select 
+        e.employee_id, 
+        count(sub.manager_id) as subordinate_count
+    from employees e 
+    join employees sub on e.employee_id = sub.manager_id
+    join departments d on e.department_id = d.department_id
+    join locations l on d.location_id = l.location_id
+    join (select distinct country_id from LeastExperience) le on l.country_id = le.country_id 
+    group by e.employee_id
+)
+select 
+    mfc.employee_id as "ID работника", 
+    mfc.subordinate_count as "количество подчиненных"
+from ManagersFromCountry mfc 
+where mfc.subordinate_count =  (
+    select 
+        MAX(mfc.subordinate_count)
+    from ManagersFromCountry mfc
+)
+order by mfc.employee_id;
+
+-- 15
+with GreatestExperience as (
+    select 
+        e.employee_id, 
+        e.hire_date,
+        l.country_id
+    from employees e
+    join departments d on e.department_id = d.department_id
+    join locations l on d.location_id = l.location_id
+    where e.hire_date = (
+        select
+            MIN(e.hire_date)
+        from employees e
+    )
+), ManagersFromCountry as (
+    select 
+        e.employee_id, 
+        SUM(sub.salary) as subordinates_salary
+    from employees e 
+    join employees sub on e.employee_id = sub.manager_id
+    join departments d on e.department_id = d.department_id
+    join locations l on d.location_id = l.location_id
+    join (select distinct country_id from GreatestExperience) ge on l.country_id = ge.country_id 
+    group by e.employee_id
+) 
+select 
+    mfc.employee_id as "ID работника",
+    mfc.subordinates_salary as "Сумма зарплат подчиненных"
+from ManagersFromCountry mfc
+where mfc.subordinates_salary = (
+    select 
+        MAX(mfc.subordinates_salary)
+    from ManagersFromCountry mfc
+)
+order by mfc.employee_id;
+
+-- 16 
+with YearlyEmployment as (
+    select 
+        extract(year from e.hire_date) as year, 
+        count(e.employee_id) as count_employees
+    from employees e
+    group by extract(year from e.hire_date)
+),
+MaxEmployment as (
+    select 
+        MAX(count_employees) as max_count
+    from YearlyEmployment
+)
+select 
+    ye.year as "Год", 
+    ye.count_employees as "Кол-во трудоустроенных"
+from YearlyEmployment ye
+join MaxEmployment me on ye.count_employees = me.max_count
+order by ye.year;
